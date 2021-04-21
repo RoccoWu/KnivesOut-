@@ -2,6 +2,7 @@
 // You can write your code in this editor
 
 //show_debug_message(global.current_phase);
+
 switch(global.current_phase)
 {
 	case global.phase_dealing:
@@ -10,16 +11,15 @@ switch(global.current_phase)
 	{				
 			for(i=0; i < startingHand; i++)			
 			{
-				var computerlocationyoffset = computerlocation2y + (i*2);
+				var computerlocationyoffset = computerlocationy + (i*2);
 				var card = deck[|0];				
 				ds_list_add(hand_computer, card);
 				//card.iscomputercard = true;
-				card.target_x = computerlocation2x;
+				card.target_x = computerlocationx;
 				card.target_y = computerlocationyoffset;
 				card.depth = deck_size + i;
 				audio_play_sound(snd_card, 1, false);
-				show_debug_message("1st place");
-				
+				//show_debug_message("1st place");				
 				
 				ds_list_delete(deck,0)
 			}
@@ -39,14 +39,14 @@ switch(global.current_phase)
 	{
 		for(i=0; i < startingHand; i++)
 			{
-				var playerlocationyoffset = playerlocation2y - (i*2);
+				var playerlocationyoffset = playerlocationy - (i*2);
 				var card = deck[|0];				
 				ds_list_add(hand_player, card);
-				card.target_x = playerlocation2x;
+				card.target_x = playerlocationx;
 				card.target_y = playerlocationyoffset;
 				card.depth = deck_size + i;
 				audio_play_sound(snd_card, 1, false);
-				show_debug_message("1st place");
+				//show_debug_message("1st place");
 				
 				
 				ds_list_delete(deck,0);
@@ -68,7 +68,7 @@ switch(global.current_phase)
 	break;
 	
 	case global.phase_computer_chooses:
-	
+	//computer will place top card in the middle
 	/*hand_computer[|0] = centerCard;
 	hand_computer[|0].target_x = centerlocationx;
 	hand_computer[|0].target_y = centerlocationy;*/
@@ -76,27 +76,30 @@ switch(global.current_phase)
 	
 	if(waittimer == 50)
 	{
-		for( i = 0; i <1; i++)
+		if(hasDealt == false)
 		{
 			var playedCard = hand_computer[|0];
-			playedCard = centerCard;
-			if(i == 0)
-				{
-					playedCard.target_x = centerlocationx;
-					playedCard.target_y = centerlocationy;	
-				}
-		}
+			centerCard = playedCard;
+			ds_list_add(middle_pile, centerCard);
+			ds_list_delete(hand_computer, centerCard);
+			
+			centerCard.target_x = centerlocationx;
+			centerCard.target_y = centerlocationy;	
+			hasDealt = true;
+			show_debug_message("this should be working");
+			show_debug_message(ds_list_size(middle_pile));
+		}		
+	}
 	
 		/*var computer_pick = random_range(0,2);
 		playedcard_computer = hand_computer[|computer_pick]; //computer chooses card
 		playedcard_computer.target_y += 100;	
 		audio_play_sound(snd_card, 1, false);*/
-	}
 	
 	if(waittimer == 60)
 	{
 		waittimer = 0;	
-		global.current_phase = global.phase_player_chooses;
+		global.current_phase = global.phase_faceup;
 	}
 	
 	
@@ -104,11 +107,7 @@ switch(global.current_phase)
 	
 	case global.phase_player_chooses:
 	
-	//if(selected_card  && selected_card.iscomputercard == false)
-	//{
-	//	selected_card.target_y += 50;	
-		
-	//}
+	
 	for(i=0; i < hand_size; i++)
 	{
 		var card = hand_player[|i];
@@ -118,7 +117,7 @@ switch(global.current_phase)
 			{
 				playedcard_player = selected_card; //choose the card
 				reveal_timer = 2 * room_speed;
-				global.current_phase = global.phase_play;
+				global.current_phase = global.phase_faceup;
 				audio_play_sound(snd_card, 1, false);
 			}
 			//card.target_y -= 50;
@@ -128,7 +127,7 @@ switch(global.current_phase)
 		
 		else
 		{
-			card.target_y = 600;	
+			card.target_y = 800;	
 		}
 	}
 	
@@ -144,61 +143,133 @@ switch(global.current_phase)
 	
 	break;
 	
-	case global.phase_play:
+	case global.phase_faceup:
 	reveal_timer--;
 	
 	//flip the computer's card
-	
-	playedcard_computer.face_up = true;
+		
+	show_debug_message("revealing card");
 	
 	if(reveal_timer == 0)
 	{
-		global.current_phase = global.phase_result;
+		centerCard.face_up = true;
+		global.current_phase = global.phase_slap;
 	}
 		
 	break;
 	
-	case global.phase_result:
-		var result = CompareCards(playedcard_computer.type, playedcard_player.type); //compare the cards and assign a winner and loser
-		switch (result) {
-			case 0: //if tie
-			score_computer += 0;
-			score_player += 0;
-			//show_debug_message("tie");
-			  break;
-			case 1: //if computer wins
-			score_computer += 1;
-			score_player += 0;
-			audio_play_sound(snd_lose, 1, false);
-			//show_debug_message("tie");
-			  break;
-			case -1: //if player wins
-			score_computer += 0;
-			score_player += 1;
-			audio_play_sound(snd_win, 1, false);
-			  break;
-		}		
-	global.current_phase = global.phase_discard;
+	case global.phase_slap:
+	//computer will evaluate if the centerCard is the card
+	//randomtimer for computer to decide
+	computerdecideTimer = irandom_range(slapminTime, slapmaxTime);	
+	computerslaptimer++;
+	
+	//Player Slaps
+		if(keyboard_check_pressed(vk_space))
+		{
+			playerslap = true;	
+		}
+
+	if(playerslap)
+	{
+		playerslaptimer++	
+		if(centerCard.type = global.knives)
+		{
+			goodslap = true;	
+			badslap = false;
+			global.current_phase = global.phase_evaluate;
+		}
+	
+		else
+		{
+			badslap = true;	
+			goodslap = false;
+			global.current_phase = global.phase_evaluate;
+		}
+	}
+
+	if(playerslaptimer == 60)
+	{
+		playerslaptimer = 0;	
+	}
+	
+	//Computer Slaps
+	if(computerslaptimer >= computerdecideTimer)
+	{
+		if(centerCard.type == global.knives)
+		{
+			computerslap = true;	
+			global.current_phase = global.phase_evaluate;
+		}
+		
+		else
+		{
+			computerslap = false;	
+		}
+	}
+	
+	break;
+			
+	case global.phase_evaluate:
+	
+	if(goodslap)
+	{
+		//deals card to computer
+		
+		if (moveTimer%4 == 0)
+		{
+            var index = ds_list_size(middle_pile)-1;    //this gives us the index of the last card on the discard pile
+            var card = middle_pile[| index];            //this gives us the actual last card object on the discard pile
+            
+			show_debug_message(ds_list_size(middle_pile));
+            card.face_up = false;                            //set it back to face down
+            card.target_x = computerlocationx;                                    //set the card target_x back to the draw deck x position
+            card.target_y = computerlocationy - 2*ds_list_size(hand_computer);         //set the card target_y back to the draw deck y position
+            card.depth = deck_size - ds_list_size(hand_computer);        //set the card depth according to how many cards are in the deck
+			    
+            ds_list_add(hand_computer,card);                            //add that card to the deck
+            ds_list_delete(middle_pile, index);            //and delete it from the discard pile
+            }        
+        }	
+	
+	else if(badslap)
+	{
+		if (moveTimer%4 == 0)
+		{
+            var index = ds_list_size(middle_pile)-1;    //this gives us the index of the last card on the discard pile
+            var card = middle_pile[| index];            //this gives us the actual last card object on the discard pile
+                           
+            card.face_up = false;                            //set it back to face down
+            card.target_x = playerlocationx;                                    //set the card target_x back to the draw deck x position
+            card.target_y = playerlocationy - 2*ds_list_size(hand_player);         //set the card target_y back to the draw deck y position
+            card.depth = deck_size - ds_list_size(hand_player);        //set the card depth according to how many cards are in the deck
+			     
+            ds_list_add(hand_player,card);                            //add that card to the deck
+            ds_list_delete(middle_pile, index);            //and delete it from the discard pile
+           }        
+     }
+	
+	else if(computerslap)
+	{
+		if (moveTimer%4 == 0)
+		{
+            var index = ds_list_size(middle_pile)-1;    //this gives us the index of the last card on the discard pile
+            var card = middle_pile[| index];            //this gives us the actual last card object on the discard pile
+                
+            card.face_up = false;                            //set it back to face down
+            card.target_x = playerlocationx;                                    //set the card target_x back to the draw deck x position
+            card.target_y = playerlocationy - 2*ds_list_size(hand_player);         //set the card target_y back to the draw deck y position
+            card.depth = deck_size - ds_list_size(hand_player);        //set the card depth according to how many cards are in the deck
+			
+			ds_list_add(hand_player,card);                            //add that card to the deck
+            ds_list_delete(middle_pile, index);            //and delete it from the discard pile
+        }    
+	}	
+	
+	
 	break;
 	
-	case global.phase_discard:
-	//var drawlocationoffset = drawlocationy - (i*10);
-	//for(i=0; i <hand_size; i++)
-	//{
-	//	hand_player[|i].face_up = true;		
-	//	hand_player[|i].target_x = discardlocationx;
-	//	hand_player[|i].target_y = discardlocationy;
-	//	hand_player[|i].canbeselected = false;	
-	//	ds_list_add(discard_pile, hand_player[|i]);
-	//}
-	//hand_computer.target_x = discardlocationx;
-	//hand_computer.target_y = discardlocationy;
-	//hand_player.target_x = discardlocationx;
-	//hand_player.target_y = discardlocationy;	
-	//playedcard_computer.target_x = discardlocationx;
-	//playedcard_computer.target_y = discardlocationy;
-	//playedcard_player.target_x = discardlocationx;
-	//playedcard_player.target_y = discardlocationy;
+	case global.phase_discard:	
 	
 	
 	for(i =0; i < hand_size; i++)
@@ -295,4 +366,11 @@ switch(global.current_phase)
 	//	global.current_phase = global.phase_dealing;	
 	//}
 	break;
+}
+
+moveTimer++;
+
+if(moveTimer == 16)
+{
+	moveTimer = 0;	
 }

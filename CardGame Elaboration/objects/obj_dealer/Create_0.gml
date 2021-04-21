@@ -13,11 +13,12 @@ global.knives = 2;
 
 global.phase_dealing = 0;
 global.phase_computer_chooses = 1;
-global.phase_player_chooses = 2;
-global.phase_play = 3;
-global.phase_result = 4;
+global.phase_faceup = 2;
+global.phase_slap = 3;
+global.phase_player_chooses = 4;
 global.phase_discard = 5;
 global.phase_reshuffle = 6;
+global.phase_evaluate = 7;
 
 global.current_phase = global.phase_dealing;
 
@@ -25,7 +26,11 @@ global.current_phase = global.phase_dealing;
 deck_size = 52;//52 for deck of cards
 startingHand = 26;
 hand_size = 3;
-slap = false;
+computerslap = false;
+playerslap = false;
+goodslap = false;
+badslap = false;
+
 
 score_player = 0;
 score_computer = 0;
@@ -47,22 +52,17 @@ discardlocationx = 730;
 discardlocationy = 480;	
 
 // computer and player card locations
-computerlocation1x = room_width/2 - room_width/5;
-computerlocation1y = 264;
-computerlocation2x = room_width/2 - 50;
-computerlocation2y = 250;
-computerlocation3x = room_width/2 + room_width/5;
-computerlocation3y = 264;
+
+computerlocationx = room_width/2 - 50;
+computerlocationy = 150;
+
 
 centerlocationx = room_width/2 - 50;
 centerlocationy = room_height/2;
 
-playerlocation1x = room_width/2 - room_width/5;
-playerlocation1y = 600;
-playerlocation2x = room_width/2 - 50;
-playerlocation2y = 700;
-playerlocation3x = room_width/2 + room_width/5;
-playerlocation3y = 600;
+playerlocationx = room_width/2 - 50;
+playerlocationy = 800;
+
 hoveroffset = 550;
 
 selected_card = noone;
@@ -70,6 +70,12 @@ reveal_timer = 2* room_speed;
 revealing = false;
 dealtimer = 0;
 waittimer = 0;
+playerslaptimer = 0;
+computerslaptimer = 0;
+hasDealt = false;
+slapminTime = 0.5 * room_speed;
+slapmaxTime = 2 * room_speed;
+moveTimer = 0;
 
 //setting up deck size
 /*
