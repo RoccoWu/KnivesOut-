@@ -121,6 +121,7 @@ switch(global.current_phase)
 			
 			centerCard.target_x = centerlocationx;
 			centerCard.target_y = centerlocationy;	
+			centerCard.depth = ds_list_size(middle_pile) * -1;
 			reveal_timer = 2 * room_speed;
 			playerLast = true;
 			computerLast = false;
@@ -155,7 +156,7 @@ switch(global.current_phase)
 	//flip the computer's card
 		
 	show_debug_message("revealing card");
-	
+	show_debug_message(reveal_timer);
 	
 	if(reveal_timer == 0)
 	{
@@ -191,8 +192,7 @@ switch(global.current_phase)
 			{	
 				playerslaptimer = 0;
 				global.current_phase = global.phase_evaluate;
-			}
-			
+			}			
 		}
 	
 		else
@@ -211,10 +211,12 @@ switch(global.current_phase)
 	//Computer Slaps
 	if(computerslaptimer >= computerdecideTimer)
 	{
+		show_debug_message(computerslaptimer);
+		show_debug_message(computerdecideTimer);
 		if(centerCard.type == global.knives)
 		{
 			computerslap = true;	
-			computerslapCooldown++;	
+			//computerslapCooldown++;	
 			global.current_phase = global.phase_evaluate;
 		}
 		
@@ -310,10 +312,10 @@ switch(global.current_phase)
 	//	global.current_phase = global.phase_turndecide;		
 	//}
 	
-	if(noslapTimer ==0 && goodslap == false && badslap == false && computerslap == false)
+	/*if(noslapTimer ==0 && goodslap == false && badslap == false && computerslap == false)
 	{		
 		global.current_phase = global.phase_turndecide;	
-	}
+	}*/
 	
 	break;
 	
