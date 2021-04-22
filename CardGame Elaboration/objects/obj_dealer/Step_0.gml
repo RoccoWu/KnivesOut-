@@ -71,6 +71,7 @@ switch(global.current_phase)
 	/*hand_computer[|0] = centerCard;
 	hand_computer[|0].target_x = centerlocationx;
 	hand_computer[|0].target_y = centerlocationy;*/
+	computerLast = false;
 	waittimer++;
 	
 	if(waittimer == 50)
@@ -107,7 +108,9 @@ switch(global.current_phase)
 	
 	case global.phase_player_chooses:
 	
+	playerLast = false;
 	var card = hand_player[|0];
+	show_debug_message(card);
 	if(position_meeting(mouse_x, mouse_y, card)) //hover
 	{
 		if(mouse_check_button_pressed(mb_left))
@@ -167,6 +170,8 @@ switch(global.current_phase)
 	//randomtimer for computer to decide
 	computerdecideTimer = irandom_range(slapminTime, slapmaxTime);	
 	computerslaptimer++;
+	show_debug_message(computerLast);
+	show_debug_message(playerLast);
 	
 	//Player Slaps
 		if(keyboard_check_pressed(vk_space))
@@ -176,33 +181,40 @@ switch(global.current_phase)
 
 	if(playerslap)
 	{
-		playerslaptimer++	
+		playerslaptimer++;	
 		if(centerCard.type = global.knives)
 		{
 			goodslap = true;	
 			badslap = false;
-			global.current_phase = global.phase_evaluate;
+			
+			if(playerslaptimer == 30)
+			{	
+				playerslaptimer = 0;
+				global.current_phase = global.phase_evaluate;
+			}
+			
 		}
 	
 		else
 		{
 			badslap = true;	
 			goodslap = false;
-			global.current_phase = global.phase_evaluate;
-		}
+			if(playerslaptimer == 30)
+			{
+				playerslap = false;	
+				playerslaptimer = 0;
+				global.current_phase = global.phase_evaluate;
+			}			
+		}	
 	}
-
-	if(playerslaptimer == 60)
-	{
-		playerslaptimer = 0;	
-	}
-	
+		
 	//Computer Slaps
 	if(computerslaptimer >= computerdecideTimer)
 	{
 		if(centerCard.type == global.knives)
 		{
 			computerslap = true;	
+			computerslapCooldown++;	
 			global.current_phase = global.phase_evaluate;
 		}
 		
@@ -210,11 +222,27 @@ switch(global.current_phase)
 		{
 			computerslap = false;	
 		}
-	}
+	}	
 	
+	
+	if(computerslapCooldown == 30)
+	{
+		computerslap = false;	
+		computerslapCooldown = 0;
+		computerslaptimer = 0;		
+	}
+	computerslap = false;
+	playerslap = false;
 	break;
 			
 	case global.phase_evaluate:
+	show_debug_message(computerLast);
+	show_debug_message(playerLast);
+	//playerslap = false;
+	//computerslap = false;
+	computerslaptimer = 0;	
+	computerslapCooldown = 0;
+	noslapTimer--;
 	
 	if(goodslap)
 	{
@@ -234,6 +262,7 @@ switch(global.current_phase)
 			    
             ds_list_add(hand_computer,card);                            //add that card to the deck
             ds_list_delete(middle_pile, index);            //and delete it from the discard pile
+			playerslap = false;
 			global.current_phase = global.phase_turndecide;
             }       
         }	
@@ -274,19 +303,34 @@ switch(global.current_phase)
             ds_list_delete(middle_pile, index);            //and delete it from the discard pile	
 			global.current_phase = global.phase_turndecide;
         }    
-	}	
+	}
 	
+	//else if(centerCard.type != global.knives && computerLast && computerslap == false)
+	//{
+	//	global.current_phase = global.phase_turndecide;		
+	//}
+	
+	if(noslapTimer ==0 && goodslap == false && badslap == false && computerslap == false)
+	{		
+		global.current_phase = global.phase_turndecide;	
+	}
 	
 	break;
 	
 	case global.phase_turndecide:	
-	if(computerLast)
+	//show_debug_message("turn is being decided");
+	noslapTimer = 3 * room_speed;
+	//player's turn
+	if(computerLast && playerLast == false)
 	{
+		
 		global.current_phase = global.phase_player_chooses;	
 	}
 	
-	else
+	//computer's turn
+	else if(playerLast && computerLast == false)
 	{
+		
 		global.current_phase = global.phase_computer_chooses;	
 	}
 	

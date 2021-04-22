@@ -74,39 +74,14 @@ dealtimer = 0;
 waittimer = 0;
 playerslaptimer = 0;
 computerslaptimer = 0;
+computerslapCooldown = 0;
 hasDealt = false;
-slapminTime = 0.5 * room_speed;
+slapminTime = 0.7 * room_speed;
 slapmaxTime = 2 * room_speed;
 moveTimer = 0;
+noslapTimer = 3 * room_speed;
 
 //setting up deck size
-/*
-for( i = 0; i <= deck_size; i++)
-{
-	
-	var drawlocationoffset = drawlocationy - (i*10);
-	//var newcard = draw_sprite(spr_deckofcards, image_index[|i], drawlocationx, drawlocationoffset);
-	var newcard = instance_create_layer(drawlocationx, drawlocationoffset,"Instances", obj_card);
-	audio_play_sound(snd_card, 1, false);
-	newcard.dealt = false;
-	newcard.face_up = false;
-	
-	ds_list_add(deck, newcard);	
-	if(i<4)
-	{
-		newcard.type = 	global.jack;
-	}
-	
-	else
-	{
-		newcard.type = global.notjack;	
-	}
-	
-}
-	random_set_seed(current_time);	
-	ds_list_shuffle(deck); //shuffles the deck
-*/
-
 
 for(i = 0; i < deck_size; i++)
 {	
