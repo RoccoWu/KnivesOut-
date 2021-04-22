@@ -16,7 +16,7 @@ global.phase_computer_chooses = 1;
 global.phase_faceup = 2;
 global.phase_slap = 3;
 global.phase_player_chooses = 4;
-global.phase_discard = 5;
+global.phase_turndecide = 5;
 global.phase_reshuffle = 6;
 global.phase_evaluate = 7;
 
@@ -30,6 +30,8 @@ computerslap = false;
 playerslap = false;
 goodslap = false;
 badslap = false;
+computerLast = false;
+playerLast = false;
 
 
 score_player = 0;
