@@ -255,14 +255,14 @@ switch(global.current_phase)
 		
 		if (moveTimer%4 == 0)
 		{
-			for(i = 0; i < ds_list_size(middle_pile); i ++)
+			/*for(i = 0; i < ds_list_size(middle_pile); i ++)
 			{
 				 var card = middle_pile[|i];  
-			}
+			}*/
 			
 			show_debug_message("player slaps knives");
-            var index = ds_list_size(middle_pile)-1;    //this gives us the index of the last card on the discard pile
-           // var card = middle_pile[| index];            //this gives us the actual last card object on the discard pile
+            var index = ds_list_size(middle_pile)-1;    //this gives us the index of the last card on the discard pile           
+            var card = middle_pile[| index];            //this gives us the actual last card object on the discard pile
             
 			show_debug_message(ds_list_size(middle_pile));
             card.face_up = false;                            //set it back to face down
@@ -276,7 +276,7 @@ switch(global.current_phase)
 			playerslap = false;
 			goodslap = false;
 			show_debug_message("slap1");
-			global.current_phase = global.phase_turndecide;
+			//global.current_phase = global.phase_turndecide;
             }       
         }	
 	
@@ -287,12 +287,12 @@ switch(global.current_phase)
 		if (moveTimer%4 == 0)
 		{
 						
-			for(i = 0; i < ds_list_size(middle_pile); i ++)
+			/*for(i = 0; i < ds_list_size(middle_pile); i ++)
 			{
 				 var card = middle_pile[|i];  
-			}
+			}*/
 			
-            //var index = ds_list_size(middle_pile)-1;    //this gives us the index of the last card on the discard pile
+            var index = ds_list_size(middle_pile)-1;    //this gives us the index of the last card on the discard pile
             var card = middle_pile[| index];            //this gives us the actual last card object on the discard pile
                            
             card.face_up = false;                            //set it back to face down
@@ -306,7 +306,7 @@ switch(global.current_phase)
 			playerslap = false;
 			badslap = false;
 			show_debug_message("slap2");
-			global.current_phase = global.phase_turndecide;
+			//global.current_phase = global.phase_turndecide;
            }         
      }
 	
@@ -315,13 +315,13 @@ switch(global.current_phase)
 		//deals card to player
 		if (moveTimer%4 == 0)
 		{
-			for(i = 0; i < ds_list_size(middle_pile); i ++)
+			/*for(i = 0; i < ds_list_size(middle_pile); i ++)
 			{
 				 var card = middle_pile[|i];  
-			}
-			
-            var index = ds_list_size(middle_pile)-1;    //this gives us the index of the last card on the discard pile
-           // var card = middle_pile[| index];            //this gives us the actual last card object on the discard pile
+			}*/
+		
+             var index = ds_list_size(middle_pile)-1;    //this gives us the index of the last card on the discard pile
+             var card = middle_pile[| index];            //this gives us the actual last card object on the discard pile
                 
             card.face_up = false;                            //set it back to face down
             card.target_x = playerlocationx;                                    //set the card target_x back to the draw deck x position
@@ -333,22 +333,24 @@ switch(global.current_phase)
 			playerslap = false;
 			computerslap = false;
 			show_debug_message("slap3");
-			global.current_phase = global.phase_turndecide;
+			//global.current_phase = global.phase_turndecide;
         }    
 	}		
-	
+	global.current_phase = global.phase_turndecide;
 	break;
 		
 	case global.phase_turndecide:	
 	show_debug_message("stuff incoming");
 	show_debug_message(centerCard);
 	show_debug_message(playerLast);
-	if(computerLast)
+	show_debug_message(computerLast);
+	
+	if(computerLast && playerLast == false)
 	{
 		global.current_phase = global.phase_player_chooses;	
 	}
 	
-	else if(playerLast && centerCard.type != global.knives) //player went last and card wasn't a knife
+	else if(computerLast == false && playerLast && centerCard.type != global.knives) //player went last and card wasn't a knife
 	{
 		show_debug_message("computer goes again");
 		global.current_phase = global.phase_computer_chooses;	
