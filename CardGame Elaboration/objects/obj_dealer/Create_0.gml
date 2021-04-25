@@ -25,7 +25,7 @@ global.current_phase = global.phase_dealing;
 
 deck_size = 52;//52 for deck of cards
 startingHand = 26;
-hand_size = 3;
+//hand_size = 3;
 computerslap = false;
 playerslap = false;
 goodslap = false;

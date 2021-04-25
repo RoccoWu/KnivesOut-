@@ -1,7 +1,7 @@
 /// @description Insert description here
 // You can write your code in this editor
 
-//show_debug_message(global.current_phase);
+show_debug_message(global.current_phase);
 
 switch(global.current_phase)
 {
@@ -60,7 +60,7 @@ switch(global.current_phase)
 			//}			
 			
 	}
-	
+	waittimer = 0;
 	global.current_phase = global.phase_computer_chooses;
 	
 	break;
@@ -69,10 +69,11 @@ switch(global.current_phase)
 	//computer will place top card in the middle
 	/*hand_computer[|0] = centerCard;
 	hand_computer[|0].target_x = centerlocationx;
-	hand_computer[|0].target_y = centerlocationy;*/
+	hand_computer[|0].target_y = centerlocationy;*/	
 	waittimer++;
 	computerLast = false;
 	computerslap = false;
+	hasDealt = false;
 	
 	if(waittimer == 50)
 	{
@@ -156,7 +157,7 @@ switch(global.current_phase)
 	
 	//flip the computer's card
 		
-	show_debug_message("revealing card");
+	//show_debug_message("revealing card");
 	
 	
 	if(reveal_timer == 0)
@@ -240,13 +241,13 @@ switch(global.current_phase)
 	break;
 			
 	case global.phase_evaluate:
-	
+	computerslaptimer = 0;
 	
 	
 	if(playerLast && centerCard.type != global.knives) //player went last and card wasn't a knife
 	{
 		show_debug_message("computer goes again");
-		global.current_phase = global.phase_turndecide;	
+		//global.current_phase = global.phase_turndecide;	
 	}
 	
 	if(goodslap)
@@ -350,7 +351,7 @@ switch(global.current_phase)
 		global.current_phase = global.phase_player_chooses;	
 	}
 	
-	else if(computerLast == false && playerLast && centerCard.type != global.knives) //player went last and card wasn't a knife
+	else if(computerLast == false && playerLast) //player went last and card wasn't a knife
 	{
 		show_debug_message("computer goes again");
 		global.current_phase = global.phase_computer_chooses;	

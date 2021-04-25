@@ -3,7 +3,7 @@
 
 if(face_up)
 {
-	show_debug_message(type);
+	//show_debug_message(type);
     switch(type) {
 		case global.knives: 
 			sprite_index = spr_knives;
@@ -13,14 +13,11 @@ if(face_up)
 			break;
 		case global.operator:
 			sprite_index = spr_operator;
-			break;
-		/*case global.jack:
-			//sprite_index = spr_jack;
-			break;
-		case global.notjack:
-			break;*/
+			break;		
 	}
-} else {
+} 
+else 
+{
 	sprite_index = spr_newback;
 }
 
