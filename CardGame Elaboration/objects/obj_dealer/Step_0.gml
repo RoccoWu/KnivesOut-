@@ -13,8 +13,7 @@ switch(global.current_phase)
 			{
 				var computerlocationyoffset = computerlocationy + (i*2);
 				var card = deck[|0];				
-				ds_list_add(hand_computer, card);
-				//card.iscomputercard = true;
+				ds_list_add(hand_computer, card);				
 				card.target_x = computerlocationx;
 				card.target_y = computerlocationyoffset;
 				card.depth = i;
@@ -23,15 +22,6 @@ switch(global.current_phase)
 				
 				ds_list_delete(deck,0)
 			}
-			
-		
-		/*card[0].x = lerp(card.x,computerlocation1x, 0.1);
-		card[0].y = lerp(card.y,computerlocation1y, 0.1);
-		card[1].x = lerp(card.x,computerlocation2x, 0.1);
-		card[1].y = lerp(card.y,computerlocation2y, 0.1);
-		card[2].x = lerp(card.x,computerlocation3x, 0.1);
-		card[2].y = lerp(card.y,computerlocation3y, 0.1);*/
-			
 			//animation
 	}
 	
@@ -53,11 +43,6 @@ switch(global.current_phase)
 			//animation
 			
 			}
-			//for(i = 0; i < hand_size; i++)
-			//{
-			//	hand_player[| i].face_up = true;	
-			//	show_debug_message("card face up");				
-			//}			
 			
 	}
 	waittimer = 0;
@@ -67,9 +52,7 @@ switch(global.current_phase)
 	
 	case global.phase_computer_chooses:
 	//computer will place top card in the middle
-	/*hand_computer[|0] = centerCard;
-	hand_computer[|0].target_x = centerlocationx;
-	hand_computer[|0].target_y = centerlocationy;*/	
+	
 	waittimer++;
 	computerLast = false;
 	computerslap = false;
@@ -93,12 +76,7 @@ switch(global.current_phase)
 			show_debug_message(ds_list_size(middle_pile));
 		}		
 	}
-	
-		/*var computer_pick = random_range(0,2);
-		playedcard_computer = hand_computer[|computer_pick]; //computer chooses card
-		playedcard_computer.target_y += 100;	
-		audio_play_sound(snd_card, 1, false);*/
-	
+			
 	if(waittimer == 60)
 	{
 		waittimer = 0;	
@@ -178,10 +156,10 @@ switch(global.current_phase)
 	computerslaptimer++;
 	
 	//Player Slaps
-		if(keyboard_check_pressed(vk_space))
-		{
-			playerslap = true;	
-		}
+	if(keyboard_check_pressed(vk_space))
+	{
+		playerslap = true;	
+	}
 
 	if(playerslap)
 	{
@@ -259,20 +237,16 @@ switch(global.current_phase)
 	show_debug_message("moveTimer:");
 	show_debug_message(moveTimer);
 	computerslaptimer = 0;
-	playerslaptimer = 0;
-	//playerslap = false;
+	playerslaptimer = 0;	
 	
 	if(playerLast && centerCard.type != global.knives) //player went last and card wasn't a knife
 	{
-		show_debug_message("computer goes again");
-		//global.current_phase = global.phase_turndecide;	
+		show_debug_message("computer goes again");		
 	}
 	
 	if(goodslap)
 	{
-		//deals card to computer
-		
-		
+		//deals card to computer			
 		if (moveTimer%4 == 0)
 		{
 			show_debug_message("goodslap");
@@ -316,10 +290,6 @@ switch(global.current_phase)
 			
 			show_debug_message("badslap");	
 			show_debug_message(ds_list_size(middle_pile));
-			/*for(i = 0; i < ds_list_size(middle_pile); i ++)
-			{
-				 var card = middle_pile[|i];  
-			}*/
 			
             var index = ds_list_size(middle_pile)-1;    //this gives us the index of the last card on the discard pile
             var card = middle_pile[| index];            //this gives us the actual last card object on the discard pile
@@ -331,8 +301,7 @@ switch(global.current_phase)
 			     
             ds_list_add(hand_player,card);                            //add that card to the deck
             ds_list_delete(middle_pile, index);            //and delete it from the discard pile			
-			show_debug_message("slap2");
-			//global.current_phase = global.phase_turndecide;
+			show_debug_message("slap2");			
            }         
      }
 	
@@ -348,11 +317,7 @@ switch(global.current_phase)
 			}
 			
 			show_debug_message("computerslap");
-			show_debug_message(ds_list_size(middle_pile));
-			/*for(i = 0; i < ds_list_size(middle_pile); i ++)
-			{
-				 var card = middle_pile[|i];  
-			}*/
+			show_debug_message(ds_list_size(middle_pile));			
 		
              var index = ds_list_size(middle_pile)-1;    //this gives us the index of the last card on the discard pile
              var card = middle_pile[| index];            //this gives us the actual last card object on the discard pile
@@ -364,8 +329,7 @@ switch(global.current_phase)
 			
 			ds_list_add(hand_player,card);                            //add that card to the deck
             ds_list_delete(middle_pile, index);            //and delete it from the discard pile				
-			show_debug_message("slap3");
-			//global.current_phase = global.phase_turndecide;
+			show_debug_message("slap3");			
         }    
 	}		
 	
@@ -413,18 +377,8 @@ switch(global.current_phase)
 	break;
 	
 	case global.phase_reshuffle:
-	show_debug_message("reshuffling");
-	//dealtimer++;
-	
-	//ds_list_copy(deck, discard_pile);
-	//ds_list_clear(discard_pile);
-	//for(i=0; i < deck_size; i++)
-	//{
-	//	instance_destroy(discard_pile[|i]);	
-	//}
-	
-	//if(dealtimer > 6)
-	//{
+	show_debug_message("reshuffling");	
+		
 		while(ds_list_size(discard_pile) >0)
 		{	
 			
@@ -440,24 +394,12 @@ switch(global.current_phase)
 			show_debug_message(ds_list_size(deck));		
 			
 		}
-		/*
-		for(i = 0; i < deck_size; i++)
-			{
-				var card = deck[|i];
-				card.target_y = drawlocationy - (10*i);	
-			}*/
 		
 		if(ds_list_size(discard_pile) = 0)
 		{
 			global.current_phase = global.phase_dealing;
 		}
-			//global.current_phase = global.phase_dealing;
-	//}
-	
-	//else
-	//{
-	//	global.current_phase = global.phase_dealing;	
-	//}
+			
 	break;
 }
 

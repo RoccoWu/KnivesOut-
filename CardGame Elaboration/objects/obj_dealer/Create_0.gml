@@ -2,9 +2,7 @@
 // You can write your code in this editor
 
 //setting up an enumerator for the card types
-/*global.rock = 0;
-global.paper = 1;
-global.scissors = 2;*/
+
 global.operator = 0;
 global.phantom = 1;
 global.knives = 2;
@@ -25,7 +23,6 @@ global.current_phase = global.phase_dealing;
 
 deck_size = 52;//52 for deck of cards
 startingHand = 26; //26 for hands
-//hand_size = 3;
 computerslap = false;
 playerslap = false;
 goodslap = false;
@@ -75,8 +72,8 @@ waittimer = 0;
 playerslaptimer = 0;
 computerslaptimer = 0;
 hasDealt = false;
-slapminTime = 0.7 * room_speed;
-slapmaxTime = 2 * room_speed;
+slapminTime = 0.5 * room_speed;
+slapmaxTime = 1.7 * room_speed;
 moveTimer = 0;
 gapTimer = 3; // if the current center card is not knives and it is the computer's turn.
 
@@ -88,8 +85,7 @@ for(i = 0; i < deck_size; i++)
 {	
 	random_set_seed(current_time);
 	ds_list_shuffle(deck); //shuffles the deck
-	var drawlocationoffset = drawlocationy - (i*10);
-	//var newcard = instance_create_depth(drawlocationx, drawlocationoffset, 1, obj_card);
+	var drawlocationoffset = drawlocationy - (i*10);	
 	var newcard = instance_create_layer(drawlocationx, drawlocationoffset,"Instances", obj_card);
 	audio_play_sound(snd_card, 1, false);
 	show_debug_message(drawlocationoffset);
@@ -101,34 +97,19 @@ for(i = 0; i < deck_size; i++)
 	if(i < 10) //should be 10
 	{
 		newcard.type = global.knives;
-
 	}
 	
 	else if( i < (deck_size-10)/2) 
 	{
 		newcard.type = global.operator;
-
 	}
 	
 	else
 	{
 		newcard.type = global.phantom;
-
 	}
 	
 	//add the newcard to the deck list
 	ds_list_add(deck, newcard);	
 }
 	
-//}
-//ds_list_shuffle(deck);
-/*
-for(i = 0; i < deck_size; i++)
-{
-	deck[|i].x = 40;
-	deck[|i].y = 600 -(10*i);
-	deck[|i].target_x = deck[|i].x;
-	deck[|i].target_y = deck[|i].y;
-	deck[|i].depth = deck_size - i;
-	
-}*/

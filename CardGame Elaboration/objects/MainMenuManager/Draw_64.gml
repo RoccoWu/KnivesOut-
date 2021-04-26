@@ -8,7 +8,7 @@ draw_set_font(font_tutorialtitle);
 draw_text(room_width/2-110,  400, string("How to Play"));
 draw_set_font(font_tutorial);
 draw_text(5, 500, string("1. The player and computer will take turn drawing a card from"));
-draw_text(5, 530, string(" their hand face down."));
+draw_text(5, 530, string(" their hand face down using the mouse and left click"));
 draw_text(5, 560, string("2. The goal is to deplete your hand by slapping the middle"));
 draw_text(5, 590, string("pile when the current played card is the correct type of card."));
 draw_text(5, 620, string("3. Here are the types of cards:"));
@@ -17,4 +17,4 @@ draw_text(460, 850, string("Do NOT slap this!"));
 
 
 draw_set_font(font_tutorialtitle);
-draw_text(room_width/2-180,  900, string("Press space to start!"));
+draw_text(room_width/2-275,  900, string("Press space to slap and start!"));
