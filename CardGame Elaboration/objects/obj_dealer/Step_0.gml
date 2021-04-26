@@ -94,6 +94,8 @@ switch(global.current_phase)
 	var card = hand_player[|0];
 	if(position_meeting(mouse_x, mouse_y, card)) //hover
 	{
+		card.depth = -9999; //sets the card to be on the top depth
+		card.target_y = hoveroffset; //hover the card 
 		if(mouse_check_button_pressed(mb_left))
 		{
 			centerCard = card; //choose the card
@@ -110,8 +112,7 @@ switch(global.current_phase)
 			audio_play_sound(snd_card, 1, false);
 		}
 		//card.target_y -= 50;
-		selected_card = card;	
-		card.target_y = hoveroffset; //hover the card 
+		selected_card = card;			
 	}
 		
 	else
