@@ -24,7 +24,7 @@ global.current_phase = global.phase_dealing;
 
 
 deck_size = 52;//52 for deck of cards
-startingHand = 26;
+startingHand = 26; //26 for hands
 //hand_size = 3;
 computerslap = false;
 playerslap = false;
@@ -75,7 +75,7 @@ waittimer = 0;
 playerslaptimer = 0;
 computerslaptimer = 0;
 hasDealt = false;
-slapminTime = 0.8 * room_speed;
+slapminTime = 0.7 * room_speed;
 slapmaxTime = 2 * room_speed;
 moveTimer = 0;
 gapTimer = 3; // if the current center card is not knives and it is the computer's turn.
@@ -98,7 +98,7 @@ for(i = 0; i < deck_size; i++)
 	newcard.dealt = false;
 	newcard.face_up = false;
 	
-	if(i < 4)
+	if(i < 2)
 	{
 		newcard.type = global.knives;
 
@@ -112,7 +112,7 @@ for(i = 0; i < deck_size; i++)
 	
 	else
 	{
-		newcard.type = global.knives;
+		newcard.type = global.phantom;
 
 	}
 	
