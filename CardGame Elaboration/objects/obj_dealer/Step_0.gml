@@ -1,7 +1,7 @@
 /// @description Insert description here
 // You can write your code in this editor
 
-show_debug_message(global.current_phase);
+//show_debug_message(global.current_phase);
 
 switch(global.current_phase)
 {
@@ -17,7 +17,7 @@ switch(global.current_phase)
 				//card.iscomputercard = true;
 				card.target_x = computerlocationx;
 				card.target_y = computerlocationyoffset;
-				card.depth = deck_size + i;
+				card.depth = i;
 				audio_play_sound(snd_card, 1, false);
 				//show_debug_message("1st place");				
 				
@@ -44,7 +44,7 @@ switch(global.current_phase)
 				ds_list_add(hand_player, card);
 				card.target_x = playerlocationx;
 				card.target_y = playerlocationyoffset;
-				card.depth = deck_size + i;
+				card.depth = i;
 				audio_play_sound(snd_card, 1, false);
 				//show_debug_message("1st place");				
 				
@@ -52,7 +52,7 @@ switch(global.current_phase)
 
 			//animation
 			
-		}
+			}
 			//for(i = 0; i < hand_size; i++)
 			//{
 			//	hand_player[| i].face_up = true;	
@@ -88,6 +88,7 @@ switch(global.current_phase)
 			centerCard.target_y = centerlocationy;	
 			centerCard.depth = ds_list_size(middle_pile) * -1;
 			hasDealt = true;
+			reveal_timer = 2 * room_speed;
 			show_debug_message("this should be working");
 			show_debug_message(ds_list_size(middle_pile));
 		}		
@@ -153,6 +154,8 @@ switch(global.current_phase)
 	break;
 	
 	case global.phase_faceup:
+	computerslaptimer = 0;
+	show_debug_message(reveal_timer);
 	reveal_timer--;
 	
 	//flip the computer's card
@@ -241,8 +244,11 @@ switch(global.current_phase)
 	break;
 			
 	case global.phase_evaluate:
+	show_debug_message("moveTimer:");
+	show_debug_message(moveTimer);
 	computerslaptimer = 0;
-	
+	playerslaptimer = 0;
+	//playerslap = false;
 	
 	if(playerLast && centerCard.type != global.knives) //player went last and card wasn't a knife
 	{
@@ -254,12 +260,17 @@ switch(global.current_phase)
 	{
 		//deals card to computer
 		
+		
 		if (moveTimer%4 == 0)
 		{
-			/*for(i = 0; i < ds_list_size(middle_pile); i ++)
+			show_debug_message("goodslap");
+			show_debug_message(ds_list_size(middle_pile));
+			
+			for(i = 0; i < ds_list_size(hand_computer); i ++)
 			{
-				 var card = middle_pile[|i];  
-			}*/
+				 var cardComputer = hand_computer[|i]; 
+				 cardComputer.depth -=1;
+			}
 			
 			show_debug_message("player slaps knives");
             var index = ds_list_size(middle_pile)-1;    //this gives us the index of the last card on the discard pile           
@@ -268,14 +279,11 @@ switch(global.current_phase)
 			show_debug_message(ds_list_size(middle_pile));
             card.face_up = false;                            //set it back to face down
             card.target_x = computerlocationx;                                    //set the card target_x back to the draw deck x position
-            card.target_y = computerlocationy - 2*ds_list_size(hand_computer);         //set the card target_y back to the draw deck y position
-            card.depth = deck_size - ds_list_size(hand_computer);        //set the card depth according to how many cards are in the deck
+            card.target_y = computerlocationy + 2*ds_list_size(hand_computer);         //set the card target_y back to the draw deck y position
+            card.depth = ds_list_size(hand_computer) +1;        //set the card depth according to how many cards are in the deck
 			    
             ds_list_add(hand_computer,card);                            //add that card to the deck
-            ds_list_delete(middle_pile, index);            //and delete it from the discard pile
-			computerslap = false;
-			playerslap = false;
-			goodslap = false;
+            ds_list_delete(middle_pile, index);            //and delete it from the discard pile			
 			show_debug_message("slap1");
 			//global.current_phase = global.phase_turndecide;
             }       
@@ -287,7 +295,15 @@ switch(global.current_phase)
 		//deals card to player
 		if (moveTimer%4 == 0)
 		{
-						
+			
+			for(i = 0; i < ds_list_size(hand_player); i ++)
+			{
+				 var cardPlayer = hand_player[|i]; 
+				 cardPlayer.depth -=1;
+			}
+			
+			show_debug_message("badslap");	
+			show_debug_message(ds_list_size(middle_pile));
 			/*for(i = 0; i < ds_list_size(middle_pile); i ++)
 			{
 				 var card = middle_pile[|i];  
@@ -299,13 +315,10 @@ switch(global.current_phase)
             card.face_up = false;                            //set it back to face down
             card.target_x = playerlocationx;                                    //set the card target_x back to the draw deck x position
             card.target_y = playerlocationy - 2*ds_list_size(hand_player);         //set the card target_y back to the draw deck y position
-            card.depth = deck_size - ds_list_size(hand_player);        //set the card depth according to how many cards are in the deck
+            card.depth = ds_list_size(hand_player) +1;        //set the card depth according to how many cards are in the deck
 			     
             ds_list_add(hand_player,card);                            //add that card to the deck
-            ds_list_delete(middle_pile, index);            //and delete it from the discard pile
-			computerslap = false;
-			playerslap = false;
-			badslap = false;
+            ds_list_delete(middle_pile, index);            //and delete it from the discard pile			
 			show_debug_message("slap2");
 			//global.current_phase = global.phase_turndecide;
            }         
@@ -316,6 +329,14 @@ switch(global.current_phase)
 		//deals card to player
 		if (moveTimer%4 == 0)
 		{
+			for(i = 0; i < ds_list_size(hand_player); i ++)
+			{
+				 var cardPlayer = hand_player[|i]; 
+				 cardPlayer.depth -=1;
+			}
+			
+			show_debug_message("computerslap");
+			show_debug_message(ds_list_size(middle_pile));
 			/*for(i = 0; i < ds_list_size(middle_pile); i ++)
 			{
 				 var card = middle_pile[|i];  
@@ -327,20 +348,32 @@ switch(global.current_phase)
             card.face_up = false;                            //set it back to face down
             card.target_x = playerlocationx;                                    //set the card target_x back to the draw deck x position
             card.target_y = playerlocationy - 2*ds_list_size(hand_player);         //set the card target_y back to the draw deck y position
-            card.depth = deck_size - ds_list_size(hand_player);        //set the card depth according to how many cards are in the deck
+            card.depth = ds_list_size(hand_player) + 1;        //set the card depth according to how many cards are in the deck
 			
 			ds_list_add(hand_player,card);                            //add that card to the deck
-            ds_list_delete(middle_pile, index);            //and delete it from the discard pile	
-			playerslap = false;
-			computerslap = false;
+            ds_list_delete(middle_pile, index);            //and delete it from the discard pile				
 			show_debug_message("slap3");
 			//global.current_phase = global.phase_turndecide;
         }    
 	}		
-	global.current_phase = global.phase_turndecide;
+	
+	else 
+	{
+		
+	}
+	
+	if(ds_list_size(middle_pile) == 0 )
+	{
+		show_debug_message("no more cards in middle pile");
+		global.current_phase = global.phase_turndecide;	
+	}
 	break;
 		
-	case global.phase_turndecide:	
+	case global.phase_turndecide:
+	computerslap = false;
+	playerslap = false;
+	goodslap = false;
+	badslap = false;
 	show_debug_message("stuff incoming");
 	show_debug_message(centerCard);
 	show_debug_message(playerLast);
@@ -348,16 +381,20 @@ switch(global.current_phase)
 	
 	if(computerLast && playerLast == false)
 	{
+		reveal_timer = 2* room_speed;
 		global.current_phase = global.phase_player_chooses;	
 	}
 	
 	else if(computerLast == false && playerLast) //player went last and card wasn't a knife
 	{
 		show_debug_message("computer goes again");
-		global.current_phase = global.phase_computer_chooses;	
+		reveal_timer = 2* room_speed;
+		global.current_phase = global.phase_computer_chooses;
 	}
+	
 	else
 	{
+		reveal_timer = 2* room_speed;
 		global.current_phase = global.phase_computer_chooses;	
 	}
 	
