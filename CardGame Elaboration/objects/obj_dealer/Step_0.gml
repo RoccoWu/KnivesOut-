@@ -186,15 +186,26 @@ switch(global.current_phase)
 	if(playerslap)
 	{
 		playerslaptimer++	
-		if(centerCard.type = global.knives)
+		if(centerCard.type == global.knives)
 		{
+			audio_play_sound(snd_knives, 1, false);
 			goodslap = true;	
 			badslap = false;
 			global.current_phase = global.phase_evaluate;
 		}
+		
 	
-		else
+		else if(centerCard.type == global.operator)
 		{
+			audio_play_sound(snd_operator, 1, false);
+			badslap = true;	
+			goodslap = false;
+			global.current_phase = global.phase_evaluate;
+		}
+		
+		else if(centerCard.type == global.phantom)
+		{
+			audio_play_sound(snd_phantom, 1, false);
 			badslap = true;	
 			goodslap = false;
 			global.current_phase = global.phase_evaluate;
@@ -211,6 +222,7 @@ switch(global.current_phase)
 	{
 		if(centerCard.type == global.knives)
 		{
+			audio_play_sound(snd_knives, 1, false);
 			computerslap = true;	
 			computerslaptimer = 0;
 			global.current_phase = global.phase_evaluate;

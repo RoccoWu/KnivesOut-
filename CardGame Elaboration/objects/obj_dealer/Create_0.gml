@@ -98,13 +98,13 @@ for(i = 0; i < deck_size; i++)
 	newcard.dealt = false;
 	newcard.face_up = false;
 	
-	if(i < 2)
+	if(i < 10) //should be 10
 	{
 		newcard.type = global.knives;
 
 	}
 	
-	else if( i < (deck_size-4)/2) 
+	else if( i < (deck_size-10)/2) 
 	{
 		newcard.type = global.operator;
 

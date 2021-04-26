@@ -10,14 +10,14 @@
     "name": "audiogroup_default",
     "path": "audiogroups/audiogroup_default",
   },
-  "soundFile": "snd_operator.wav",
-  "duration": 2.580542,
+  "soundFile": "snd_phantom.wav",
+  "duration": 1.485646,
   "parent": {
     "name": "Sounds",
     "path": "folders/Sounds.yy",
   },
   "resourceVersion": "1.0",
-  "name": "snd_operator",
+  "name": "snd_phantom",
   "tags": [],
   "resourceType": "GMSound",
 }

@@ -10,14 +10,14 @@
     "name": "audiogroup_default",
     "path": "audiogroups/audiogroup_default",
   },
-  "soundFile": "snd_operator.wav",
-  "duration": 2.580542,
+  "soundFile": "snd_knives.wav",
+  "duration": 1.068417,
   "parent": {
     "name": "Sounds",
     "path": "folders/Sounds.yy",
   },
   "resourceVersion": "1.0",
-  "name": "snd_operator",
+  "name": "snd_knives",
   "tags": [],
   "resourceType": "GMSound",
 }
